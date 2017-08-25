@@ -26,7 +26,11 @@ npm init
 
 ## Running the tests
 
-Coming soon!
+In this example, you would input the 'foo.js' file and Nimis would compress that file with gzip, outputting bar.gz in the selected directory. Please note that file extensions should not be used with the output file as it is automatically compressed.
+
+```
+backupFile('foo.js', 'bar');
+```
 
 
 ## Deployment
