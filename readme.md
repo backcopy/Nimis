@@ -4,15 +4,15 @@ Nimis is a barebones, highly versatile, NodeJS asynchronous backup utility with 
 
 ## Getting Started
 
-Nimis is highly versitle and lite, therefore it does that require you to plug in most of your own application. 
+Nimis is highly versitle and lite, it naturally requires you to plug in most of your own application. 
 
 ### Prerequisites
 
 Depedencies required for Nimis to function properly. 
 
 ```
-* NodeJS (8.4.0)
-* Linux OS (RHEL preffered)
+1. NodeJS (8.4.0)
+2. Linux OS (RHEL preffered)
 ```
 
 ### Installing

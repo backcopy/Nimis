@@ -41,6 +41,6 @@ let w = fs.createWriteStream(`${outputName}.gz`); // Output file
 }; 
 
 
-backupFile('example2.js', 'foobaroa1');
+
 
 
