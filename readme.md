@@ -2,6 +2,10 @@
 
 Nimis is a barebones, highly versatile, NodeJS asynchronous backup utility with built-in secure hashing.
 
+## Warning
+
+This project is under development and should not in any way be used in a production environment. 
+
 ## Getting Started
 
 Nimis is highly versitle and lite, it naturally requires you to plug in most of your own application. 
