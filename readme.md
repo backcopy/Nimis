@@ -1,4 +1,4 @@
-# Nimis
+![main logo](https://i.imgur.com/5EBJAY7.png?raw=true "Main Logo")
 
 Nimis is a barebones, highly versatile, NodeJS asynchronous backup utility with built-in secure hashing.
 
