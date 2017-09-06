@@ -2,7 +2,7 @@ const fs = require('fs');
 const crypto = require('crypto'); 
 const zlib = require('zlib'); 
 
-// Webbing function (for hashing) 
+// Webbing function (for hashing) e
 function hashCallback(hash){
     console.log(`SHA512 HASH: ${hash}`)
 }
