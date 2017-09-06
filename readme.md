@@ -27,7 +27,7 @@ npm init
 ```
 
 
-## Running the tests
+## Execution
 
 A regular Nimis call for 2 files. You're required to send an array of files names to Nimis - you must include the complete path. This is likely going to undergo some more development soon to fix a few potential bugs. 
 
