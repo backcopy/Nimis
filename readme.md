@@ -38,7 +38,7 @@ let nimis = require('./nimis.js');
 
 #### Nimis real example
 
-You're required to send an array of files names to Nimis - you must include the complete path. This is likely going to undergo some more development soon to fix a few potential bugs. 
+You're required to send an array of file names to Nimis - you must include the complete path. This is likely going to undergo some more development soon to fix a few potential bugs. 
 
 ```
 nimis(['file1.js', 'file2.js'])
@@ -88,7 +88,7 @@ Due to the asynchronous nature of Nimis, your application must also be asynchron
 ## To do list
 
 ```
-1.  
+1.  Provide more unique file output names. 
     1.1 - Provide information back as object if
     file is non-existant. 
     
