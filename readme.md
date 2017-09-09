@@ -8,7 +8,7 @@ This project is under development and should not in any way be used in a product
 
 ## Getting Started
 
-Nimis is very barebones, containing only what's most needed and as such it naturally requires you to plug in most of your own application. 
+Nimis contains only what's most needed and as such it naturally requires you to plug in most of your own application. Feel free to modify it in order to suit your needs. 
 
 ### Prerequisites
 
@@ -26,8 +26,15 @@ Installing the Nimis utility is quite simple, just pull a copy of this repositor
 npm init 
 ```
 
+The default backup directory for Nimis is /backups/ - you must ensure that this directory exists or you must specify your own directory. 
 
 ## Execution
+
+You must include Nimis as part of your application. 
+
+```
+let nimis = require('./nimis.js'); 
+```
 
 A regular Nimis call for 2 files. You're required to send an array of files names to Nimis - you must include the complete path. This is likely going to undergo some more development soon to fix a few potential bugs. 
 
@@ -45,18 +52,50 @@ Nimis will then reply with the objects containing your intial files and zipped f
    { initHash: 'f149014e4a8cdb231e4dd8dfdd4649135576d703b4da157b5ce95c68efbffc95601d4016e542666fc8a08920084d6e6caeecf7d9b1f036f4230c57c7d64b31f9',
      zipHash: 'c47c7163b0155b376ccb1da02d6145f547955cc9eeca0a385fafcbc161523b522f261f717251d0ed905a7a891d6fc69e56adf5fe7c5ec5bdcbd2c13039fae53b' } }
 ```
+
+As you can see, multiple files can be sent as an array. Nimis will return objects, such as p0, p1, p2 and so forth, based on the files provided to Nimis. 
+
+Below is an example of how to asynchronously execute Nimis. 
+
+```
+let nimis = require('./nimis.js'); 
+
+async function foo(){
+   try{
+       let bar = await nimis.c(['readme.md']); 
+        console.log(bar);
+       
+   } catch(err){
+       throw new Error(err); 
+   }
+    
+}; 
+
+foo();
+```
+
+
 ## Deployment
 
 Due to the asynchronous nature of Nimis, your application must also be asynchronous and as such, must also execute nimis asynchronously. Failure to do so will result in critical errors. 
 
-## Built With
 
-* [NodeJS](https://nodejs.org/) - v8.4.0
+## To do list
 
+```
+1. Check if file exists before any actions. 
+    1.1 - Provide information back as object if
+    file in non-existant. 
+    
+2. Change filename to something more unique. 
+    1.1 - Use first 12 charecters from initial
+    file hash and combine with the last 12 chars
+    from the gzip hash to form the final unique
+    filename. 
 
-## Contributing
-
-Coming soon!
+3. Do more error checking. 
+    
+```
 
 ## Versioning
 
@@ -71,6 +110,4 @@ Coming soon!
 
 Coming soon!
 
-## Acknowledgments
 
-Coming soon!
