@@ -30,13 +30,13 @@ The default backup directory for Nimis is /backups/ - you must ensure that this 
 
 ## Execution
 
-### Nimis initialization
+#### Nimis initialization
 
 ```
 let nimis = require('./nimis.js'); 
 ```
 
-### Nimis using two files
+#### Nimis real example
 
 You're required to send an array of files names to Nimis - you must include the complete path. This is likely going to undergo some more development soon to fix a few potential bugs. 
 
@@ -44,8 +44,8 @@ You're required to send an array of files names to Nimis - you must include the 
 nimis(['file1.js', 'file2.js'])
 ```
 
-### Nimis reply 
-Nimis will then reply with the objects containing your intial files and zipped files  hashes. 
+#### Nimis reply 
+Nimis will then reply with the objects containing your hashes. Both the initial file and the compressed file hashes will be provided.
 
 ```
 { p0: 
@@ -59,7 +59,7 @@ Nimis will then reply with the objects containing your intial files and zipped f
 As you can see, multiple files can be sent as an array. Nimis will return objects, such as p0, p1, p2 and so forth, based on the files provided to Nimis. 
 
 
-### Asynchronous execution
+#### Asynchronous execution
 Below is an example of how to asynchronously execute Nimis. 
 
 ```
@@ -88,7 +88,7 @@ Due to the asynchronous nature of Nimis, your application must also be asynchron
 ## To do list
 
 ```
-1. Check if file exists before any actions. 
+1.  
     1.1 - Provide information back as object if
     file is non-existant. 
     
