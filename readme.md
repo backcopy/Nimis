@@ -58,6 +58,19 @@ Nimis will then reply with the objects containing your hashes. Both the initial 
 
 As you can see, multiple files can be sent as an array. Nimis will return objects, such as p0, p1, p2 and so forth, based on the files provided to Nimis. 
 
+####Errors
+
+Here is an example of an error where 2/3 of the files sent to Nimis did not exist.
+
+```
+{ p0: { error: 'FILE NOT FOUND' },
+  p1: { error: 'FILE NOT FOUND' },
+  p2: 
+   { initHash: 'eec63369ef956e9c31f4ae7db33672edc6f82555cdffe0a1be6c02f8eeacda0872d6ccf82cb3f78f4266d33c2be7493d585fe58f2e5db984b8501804d90fe6ef',
+     zipHash: 'c647063f348c0b98ab098dcf27dede177e45ae153281bea06a1c92f3dd4c2a45a741747fa8c3673c158d5867aed8860c68c11bcf4d5604a119cabafef36a9996',
+     fileName: 'd6afe5f8b5432905b5f64dfac6a85ab0587a34fd' } }
+```
+
 
 #### Asynchronous execution
 Below is an example of how to asynchronously execute Nimis. 
@@ -88,17 +101,14 @@ Due to the asynchronous nature of Nimis, your application must also be asynchron
 ## To do list
 
 ```
-1.  Provide more unique file output names. 
-    1.1 - Provide information back as object if
-    file is non-existant. 
-    
-2. Change filename to something more unique. 
-    1.1 - Use first 12 charecters from initial
-    file hash and combine with the last 12 chars
-    from the gzip hash to form the final unique
-    filename. 
+1. Do more error checking. 
 
-3. Do more error checking. 
+2. Check if file exists (based on hash) and
+do not backup 
+    - offer this as an option 
+    
+3. create /backups/ if it doesn't already
+exist. 
     
 ```
 
