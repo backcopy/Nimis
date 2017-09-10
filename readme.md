@@ -58,7 +58,7 @@ Nimis will then reply with the objects containing your hashes. Both the initial 
 
 As you can see, multiple files can be sent as an array. Nimis will return objects, such as p0, p1, p2 and so forth, based on the files provided to Nimis. 
 
-####Errors
+#### Errors
 
 Here is an example of an error where 2/3 of the files sent to Nimis did not exist.
 
