@@ -13,17 +13,21 @@ let bindFiles = require('./lib/bind_module.js').c;
 async function main(file, dir){
     
     try {
+        // <== EC CHECKS ==> 
+            // 1. Check hash. 
+            // 2. Check produced file name. 
+            // 3. Check ext data. 
+            // 4. Check returned hashZip data. 
         let hashInit = await hash(file);
         let uniqueFileName = await uniqueFn(); 
-            await zip(file, `${dir}/${uniqueFileName}.gz`);
+        let ext = await zip(file, `${dir}/${uniqueFileName}`);
+        let hashZip = await hash(`${dir}/${uniqueFileName}${ext}.gz`);
         
-        
-        let hashZip = await hash(`${dir}/${uniqueFileName}.gz`);
-        
+        // EC - Check return objects objects integrity
         return {
             initialNormalHash: hashInit, 
             zipFileHash: hashZip,
-            zipFileName: uniqueFileName
+            zipFileName: `${uniqueFileName}${ext}.gz`
         }
    
     } catch(err){
@@ -37,6 +41,11 @@ async function main(file, dir){
      
     try{
         objectHolder = {};
+        
+        // <== EC CHECKS ==> 
+            // 1. Check data provided by tempDir. 
+            // 2. Check finalName data. 
+            // 3. Check initArray to confirm array data. 
         let tempDir = await uniqueDir(); 
         let finalName = await uniqueFn();
         let initArray = arrayOfFiles; 
@@ -62,14 +71,18 @@ async function main(file, dir){
         }
         }            
     }
+        // EC - Check to ensure tempDir data exists 
         
-        await bindFiles(tempDir, `backups/${finalName}.gz`); // Combine all files
-        let bindZip = await hash(`backups/${finalName}.gz`);
+        await bindFiles(`backups/${finalName}.zip`, tempDir)
+        let bindZip = await hash(`backups/${finalName}.zip`);
         
-        objectHolder['COMPLETE_GZIP'] = {
+        objectHolder['COMPLETE'] = {
              hash: bindZip,
-             fileName: `${finalName}.gz`
+             fileName: `${finalName}.zip`
         }
+        
+        // EC - Check to ensure objectHolder data isn't empty 
+        // or invalid.
         return objectHolder // OBJECT RETURNED HERE  
         
     } catch(err){
