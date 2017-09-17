@@ -31,7 +31,7 @@ async function main(file, dir){
         }
    
     } catch(err){
-        throw new Error(err);
+        console.error(err);
     }
     
 }
@@ -69,12 +69,25 @@ async function main(file, dir){
             objectHolder[currentPosition] = {
              error: 'FILE NOT FOUND'
         }
-        }            
+        }
+        // EC - Check integrity of fileStatus OK/FAIL
     }
-        // EC - Check to ensure tempDir data exists 
+       // EC - Check if all files provided do not exist, make sure Nimis
+       // halts execution to avoid attempting to zip an empty input. 
         
-        await bindFiles(`backups/${finalName}.zip`, tempDir)
-        let bindZip = await hash(`backups/${finalName}.zip`);
+        // EC - Check to ensure tempDir data exists
+        let tempDirStatus = await fileStat(tempDir);
+            if (tempDirStatus === 'FAIL'){
+                throw 'UNABLE TO LOCATE TEMPORARY DIRECTORY'; 
+            }
+
+        // EC - Check to ensure /backups/ directory exists
+        let backupDirStatus = await fileStat('backups/'); 
+            if (backupDirStatus === 'FAIL'){
+                throw ('NIMIS COULD NOT LOCATE THE /BACKUPS/ DIRECTORY.');
+            } else if (backupDirStatus === 'OK') {
+                await bindFiles(`backups/${finalName}.zip`, tempDir)
+                    let bindZip = await hash(`backups/${finalName}.zip`);
         
         objectHolder['COMPLETE'] = {
              hash: bindZip,
@@ -83,10 +96,15 @@ async function main(file, dir){
         
         // EC - Check to ensure objectHolder data isn't empty 
         // or invalid.
-        return objectHolder // OBJECT RETURNED HERE  
+            if (objectHolder.p0 && objectHolder.COMPLETE){
+                return objectHolder // OBJECT RETURNED HERE  
+            } else {
+                throw 'MALFORMED OBJECT HOLDER.';
+            }
+        }
         
     } catch(err){
-        throw new Error(err);
+        console.error(err);
     }
 }
 
