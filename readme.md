@@ -97,7 +97,7 @@ As you can see, multiple files can be sent as an array. Nimis will return object
 
 `COMPLETE` 
 
-Once your files have been hashed, compressed and hashed again, Nimis will then compress the provided folders into one main zip file, providing encryption in the process. The `COMPLETE` object also contains the `hash` which is the hash of the final zip file, the `fileName` object property, which contains the file name of the zip and the `key` object which contains the password to the zip file. 
+Once your files have been hashed, compressed and hashed again, Nimis will then compress the the GZIP files into one main zip file, providing encryption in the process. The `COMPLETE` object also contains the `hash` which is the hash of the final zip file, the `fileName` object property, which contains the file name of the zip and the `key` object which contains the password to the zip file. 
 
 These are both currently stored in the /backups/ directory. 
 
