@@ -16,6 +16,8 @@ Depedencies required for Nimis to function properly.
 
 ```
 1. NodeJS (8.5.0)
+2. Zip utility
+    2.1 - Tested in a development environment with CentOS 7. 
 ```
 
 ### Installing
