@@ -10,6 +10,7 @@ let fileStat = require('./lib/fileStatus_module.js').c;
 let bindFiles = require('./lib/bind_module.js').c; 
 
 
+
 async function main(file, dir){
     
     try {
@@ -17,14 +18,14 @@ async function main(file, dir){
         let hashInit = await hash(file);
         let uniqueFileName = await uniqueFn(); 
         let ext = await zip(file, `${dir}/${uniqueFileName}`);
-        let hashZip = await hash(`${dir}/${uniqueFileName}${ext}.gz`);
+        let hashGz = await hash(`${dir}/${uniqueFileName}${ext}.gz`);
         
         // EC - Check return objects objects integrity
-        if (hashInit && hashZip && uniqueFileName){
+        if (hashInit && hashGz && uniqueFileName){
             return {
             initialNormalHash: hashInit, 
-            zipFileHash: hashZip,
-            zipFileName: `${uniqueFileName}${ext}.gz`
+            GzFileHash: hashGz,
+            GzFileName: `${uniqueFileName}${ext}.gz`
         }
         }
         
@@ -58,17 +59,18 @@ async function main(file, dir){
                 
                 
                     if (fileStatus === 'OK'){
-                        objectHolderAmount += 1; 
+                        objectHolderAmount++; 
                     let returnData = await main(initArray[i], tempDir);
                     let currentPosition = `p${[i]}`;
              objectHolder[currentPosition] = {
-             initHash: returnData.initialNormalHash,
-             zipHash: returnData.zipFileHash,
-             fileName: returnData.zipFileName
+             iHash: returnData.initialNormalHash, // Intial file uncompressed, hash. 
+             cHash: returnData.GzFileHash, // Individual file, compressed. 
+             FnI: initArray[i], // Individual file name, uncompressed. 
+             FnC: returnData.GzFileName // Individual file name, compressed.
         };  
         } else if (fileStatus === 'FAIL'){
-            objectHolderAmount += 1;
-                objectHolderFileNotFound += 1; 
+            objectHolderAmount++;
+                objectHolderFileNotFound++; 
             
                     let currentPosition = `p${[i]}`;
             objectHolder[currentPosition] = {
@@ -95,12 +97,15 @@ async function main(file, dir){
             if (backupDirStatus === 'FAIL'){
                 throw 'NIMIS COULD NOT LOCATE THE /BACKUPS/ DIRECTORY.';
             } else if (backupDirStatus === 'OK') {
-                await bindFiles(`backups/${finalName}.zip`, tempDir)
+                
+                // Bind files and return key to outputSecureKey
+                let outputSecureKey = await bindFiles(`backups/${finalName}.zip`, tempDir)
                     let bindZip = await hash(`backups/${finalName}.zip`);
         
         objectHolder['COMPLETE'] = {
              hash: bindZip,
-             fileName: `${finalName}.zip`
+             fileName: `${finalName}.zip`,
+             key: outputSecureKey
         }
         
         // EC - Check to ensure objectHolder data isn't empty 
