@@ -4,15 +4,13 @@
   "description": "Asynchronous data backup utility",
   "main": "nimis.js",
   "scripts": {
-    "test": ""
+    "test": "mocha || true"
   },
   "author": "Edin Jusupovic",
   "license": "ISC",
-  "dependencies": {
-      
-  },
+  "dependencies": {},
   "devDependencies": {
-    "chai": "^4.1.1",
-    "mocha": "^3.5.0"
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3"
   }
 }

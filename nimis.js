@@ -10,7 +10,7 @@ let fileStat = require('./lib/fileStatus_module.js').c;
 let bindFiles = require('./lib/bind_module.js').c; 
 
 
-
+// <=== BACKUP MODULE ===> 
 async function main(file, dir){
     
     try {
@@ -36,8 +36,8 @@ async function main(file, dir){
     
 }
 
-
- exports.call = async function core(arrayOfFiles){
+// <=== BACKUP MODULE ===> 
+ exports.backup = async function core(arrayOfFiles){
      
     try{
         objectHolder = {};
@@ -121,4 +121,46 @@ async function main(file, dir){
         throw err;
     }
 }
+ 
+ 
+ 
+ 
+ 
+ 
+// <=== REBUILD MODULE ===> 
 
+// Check integrity of zip file. 
+ 
+// Unzip the main provided zip file. 
+ 
+// Dump contents into %temp% folder for preview. 
+ 
+// Match hash of .gz files. 
+ 
+// Extract .gz files into another %temp% directory. 
+ // 1. Delete .gz files from %temp% 
+ 
+// Match initial hash of files. 
+ 
+// Use FnI property to rebuild initial files into designated path. 
+ 
+
+// <=== API ===> 
+ 
+// Nimis(zipPath, objectData, returnPath)
+ // zipPath = Path of zip file.
+ // objectData = The nimis generated object. 
+ // returnPath = Path where you wish to have the backup unload. 
+
+// objectPath === 
+ 
+//{ p0: 
+//   { iHash: 'e7a555eb3f7c27327a21ae7e48a7481c9543efd68d7c92a080318acbfd4cae1cfa4d8fd3bcd05d3e51702f6f68112442a2ace378317cbd394a9a5bbf71714f42',
+//     cHash: '286729de6406b8b5a5e1d800259e54a9ae7e198ad4c8a45468baf72300195c26723c0505c0a7e682ec8ec8374b8743778c295663a334607521fb76a24c6a6361',
+//     FnI: 'package.json',
+//     FnC: '82830dd28b38622a05efbef62346ebbf47f7b7b3.json.gz' }
+//  COMPLETE: 
+//   { hash: '86ce482199958e5cc0f2a3f2d1becbe269a28e106519c203e35ad5c13655d33f881f4dedb498481dea9b4ff1b3aa377d2f083210c6cb13a0543c6c0ee90123e1',
+//     fileName: '0413cc052b1a2629fa4594605e05470a4674b30b.zip',
+//     key: 'e3862a0a8a6c2aa9c57228157501bc59b1da14e6e214797fe3fb5a63e5c3' } } 
+ 
