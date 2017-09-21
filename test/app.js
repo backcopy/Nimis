@@ -95,6 +95,15 @@ it('Verify nimis file name rebuild system functionality.', async () => {
     
 }); 
 
+describe('Environment System', () =>{
+    it('Check for working zip utility.', async () => {
+        // HERE
+});
+    
+
+});
+
+
 describe('Security System', () =>{
     it('Generate random data for Nimis.', async () => {
 

@@ -30,6 +30,61 @@ npm init
 
 The default backup directory for Nimis is /backups/ - you must ensure that this directory exists or you must specify your own directory. 
 
+### Testing 
+
+You can test the Nimis build by running `npm run test`, which will produce the tests - an example is below. 
+
+```
+Nimis (backup)
+    ✓ Verify nimis initial file integrity checking.
+    ✓ Verify nimis gzip file integrity checking.
+    ✓ Verify nimis return object data structure.
+    ✓ Verify Nimis with multiple randomized files.
+    ✓ Verify key provided to return object.
+
+  Nimis (rebuild)
+    ✓ Verify unzip functionality.
+    ✓ Verify integrity of gzip files inside zip.
+    ✓ Verify extraction functionality of gzip files.
+    ✓ Verify integrity of original files.
+    ✓ Verify nimis file name rebuild system functionality.
+
+  Environment System
+    ✓ Check for working zip utility.
+
+  Security System
+    ✓ Generate random data for Nimis.
+
+  File System
+    ✓ Check /backups/ directory exists.
+    ✓ Check file system is correctly reporting non-existant directories.
+    ✓ Check file system is correctly reporting non-existant files.
+    ✓ Create new test file.
+    ✓ Check hash of test file.
+    ✓ Delete test file from system.
+
+  Gzip System
+    ✓ Check gzip functionality with test file.
+    ✓ Check gzip file integrity.
+    ✓ Delete original test file from system.
+    ✓ Delete gzip test file from system.
+
+  Zip System
+    ✓ Create new test file.
+    ✓ Gzip and compress new test file.
+    ✓ Zip new test gzip file.
+    ✓ Check zip file integrity.
+
+  Clean up
+    ✓ Delete original test file.
+    ✓ Delete gzip test file.
+    ✓ Delete zip test file.
+
+
+  29 passing (62ms)
+```
+
+
 ## Execution
 
 #### Nimis initialization
