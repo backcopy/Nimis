@@ -35,22 +35,26 @@ The default backup directory for Nimis is /backups/ - you must ensure that this 
 You can test the Nimis build by running `npm run test`, which will produce the tests - an example is below. 
 
 ```
-Nimis (backup)
-    ✓ Verify nimis initial file integrity checking.
-    ✓ Verify nimis gzip file integrity checking.
-    ✓ Verify nimis return object data structure.
-    ✓ Verify Nimis with multiple randomized files.
-    ✓ Verify key provided to return object.
+  Nimis (backup)
+    ✓ Verify nimis initial file integrity checking. [NDY]
+    ✓ Verify nimis gzip file integrity checking. [NDY]
+    ✓ Verify Nimis with multiple randomized files. [NDY]
+    ✓ Verify key provided to return object. [NDY]
 
-  Nimis (rebuild)
-    ✓ Verify unzip functionality.
-    ✓ Verify integrity of gzip files inside zip.
-    ✓ Verify extraction functionality of gzip files.
-    ✓ Verify integrity of original files.
-    ✓ Verify nimis file name rebuild system functionality.
+  Nimis | Return object data structure
+    ✓ Prepare test file 1.
+    ✓ Prepare test file 2.
+    ✓ iHash
+    ✓ cHash (59ms)
+    ✓ FnC
+    ✓ FnI
+    ✓ COMPLETE object
+    ✓ COMPLETE.hash
+    ✓ COMPLETE.fileName
+    ✓ COMPLETE.key
 
   Environment System
-    ✓ Check for working zip utility.
+    ✓ Check for working zip utility. [NDY]
 
   Security System
     ✓ Generate random data for Nimis.
@@ -73,16 +77,20 @@ Nimis (backup)
     ✓ Create new test file.
     ✓ Gzip and compress new test file.
     ✓ Zip new test gzip file.
-    ✓ Check zip file integrity.
+    ✓ Check zip file integrity. [NDY]
 
   Clean up
     ✓ Delete original test file.
     ✓ Delete gzip test file.
     ✓ Delete zip test file.
+    ✓ Delete test file 1 for object structure testing.
+    ✓ Delete test file 2 for object structure testing.
 
 
-  29 passing (62ms)
+  35 passing (198ms)
 ```
+
+Tests that are currently not developed or ready yet have '[NDY]' at the end of their description. 
 
 
 ## Execution
@@ -90,7 +98,7 @@ Nimis (backup)
 #### Nimis initialization
 
 ```
-let nimis = require('./nimis.js').call; 
+let nimis = require('./nimis.js').backup; 
 ```
 
 #### Nimis example
@@ -98,7 +106,7 @@ let nimis = require('./nimis.js').call;
 You're required to send an array of file names to Nimis - you must include the complete path. This is likely going to undergo some more development soon to fix a few potential bugs. 
 
 ```
-nimis(['file1.js', 'file2.js'])
+nimis(['file1.js', 'file2.js']);
 ```
 
 #### Nimis reply 
@@ -119,7 +127,7 @@ The zipHash object contains your compressed/gzip file hash.
 `FnI`
 
 
-The fileNameInitial, or FnI object contains the inital file name, which can later be used to rebuild the initial file. 
+The fileNameInitial, or FnI object contains the inital file name, which can later be used to rebuild the initial file. The FnI property also contains the initial file path along with the full file name and extension. 
 
 `FnC`
 
@@ -187,7 +195,7 @@ Here is an example of an error where 1/3 of the files sent to Nimis did not exis
 Below is an example of how to asynchronously execute Nimis. 
 
 ```
-let nimis = require('./nimis.js').call; 
+let nimis = require('./nimis.js').backup; 
 
 async function foo(){
    try{

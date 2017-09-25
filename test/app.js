@@ -2,14 +2,14 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 const assert = require('chai').assert; 
-const expect = require('chai').expect
+const expect = require('chai').expect;
 
 let fileStat = require('../lib/fileStatus_module.js').c; 
 let hash = require('../lib/hash_module.js').File; 
 let zip = require('../lib/zip_module.js').File;
 let bindFiles = require('../lib/bind_module.js').c; 
 
-let nimis = require('../nimis.js').call; 
+let nimis = require('../nimis.js').backup; 
 
 // <== GENERATE RANDOM DATA ==> 
 let randomDataGen = () => {
@@ -34,6 +34,7 @@ let createFile = (fileName = "nimisTestFile.txt") => {
     })  
 }
 
+
 // <== DELETE FILE ==> 
 let deleteFile = (fileName) => {
     return new Promise((resolve, reject) => {
@@ -47,56 +48,108 @@ let deleteFile = (fileName) => {
  
 describe('Nimis (backup)', () =>{
     
-it('Verify nimis initial file integrity checking.', async () => {
-        
+it('Verify nimis initial file integrity checking. [NDY]', async () => {
+
+    
 });
     
-it('Verify nimis gzip file integrity checking.', async () => {
+it('Verify nimis gzip file integrity checking. [NDY]', async () => {
         
 });
 
-it('Verify nimis return object data structure.', async () => {
-        
-});  
     
-it('Verify Nimis with multiple randomized files.', async () => {
+it('Verify Nimis with multiple randomized files. [NDY]', async () => {
         
 });
     
-it('Verify key provided to return object.', async () => {
+it('Verify key provided to return object. [NDY]', async () => {
         
 });
   
 });
 
+describe('Nimis | Return object data structure', () =>{
+    
+it('Prepare test file 1.', async() => {
+   createFile('backups/exampleFile01.txt'); 
+   let result = await fileStat('backups/exampleFile01.txt');
+    
+    expect(result).to.equal('OK');
+})   
+    
+it('Prepare test file 2.', async() => {
+   createFile('backups/exampleFile02.txt'); 
+      let result = await fileStat('backups/exampleFile02.txt');
+    
+    expect(result).to.equal('OK');
+})
+    
+    
+it('iHash', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
+    
+        expect(result.p0.FnI).to.be.an('string');
+    
+})
 
-describe('Nimis (rebuild)', () => {
-    // <== COMING AFTER REBUILD SYSTEM ==> 
+
+it('cHash', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
     
-it('Verify unzip functionality.', async () => {
-        
-});
+        expect(result.p1.cHash).to.be.an('string');
+})
+
+
+it('FnC', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
     
-it('Verify integrity of gzip files inside zip.', async () => {
-        
-});
+        expect(result.p0.FnC).to.be.an('string')
+})
+
+
+
+it('FnI', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt']);
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
     
-it('Verify extraction functionality of gzip files.', async () => {
-        
-});
+    expect(result.p0.FnI).to.equal('backups/exampleFile01.txt')   
+    })
+ 
+it('COMPLETE object', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
     
-it('Verify integrity of original files.', async () => {
-        
-});
+        expect(result.COMPLETE).to.be.an('object');
+    })
     
-it('Verify nimis file name rebuild system functionality.', async () => {
-        
-});
+it('COMPLETE.hash', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
     
+        expect(result.COMPLETE.hash).to.be.an('string'); 
+    })
+    
+it('COMPLETE.fileName', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
+    
+        expect(result.COMPLETE.fileName).to.be.an('string');
+    })
+    
+it('COMPLETE.key', async() => {
+    let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
+        await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
+    
+        expect(result.COMPLETE.key).to.be.an('string');
+    })
 }); 
 
+
 describe('Environment System', () =>{
-    it('Check for working zip utility.', async () => {
+    it('Check for working zip utility. [NDY]', async () => {
         // HERE
 });
     
@@ -224,7 +277,7 @@ it('Zip new test gzip file.', async () => {
     expect(result).to.equal('OK');
 });
   
-it('Check zip file integrity.', async () => {
+it('Check zip file integrity. [NDY]', async () => {
     // NOT POSSIBLE WITHOUT THE REBUILD SYSTEM. 
 });
     
@@ -249,6 +302,20 @@ it('Delete gzip test file.', async () => {
 it('Delete zip test file.', async () => {
     await deleteFile('backups/zipTest1.zip'); 
     let result = await fileStat('backups/zipTest1.zip');
+    
+    expect(result).to.equal('FAIL');       
+});
+    
+it('Delete test file 1 for object structure testing.', async () => {
+    await deleteFile('backups/exampleFile01.txt'); 
+    let result = await fileStat('backups/exampleFile01.txt');
+    
+    expect(result).to.equal('FAIL');       
+});
+    
+it('Delete test file 2 for object structure testing.', async () => {
+    await deleteFile('backups/exampleFile02.txt'); 
+    let result = await fileStat('backups/exampleFile02.txt');
     
     expect(result).to.equal('FAIL');       
 });
