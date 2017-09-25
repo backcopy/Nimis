@@ -76,17 +76,15 @@ The files will be backed up to the `/backups/` directory by default. The user ma
 You can test the Nimis build by running `npm run test`, which will produce the behaviour tests - an example is below. 
 
 ```
-  Nimis (backup)
+  Nimis
     ✓ Verify nimis initial file integrity checking. [NDY]
     ✓ Verify nimis gzip file integrity checking. [NDY]
     ✓ Verify Nimis with multiple randomized files. [NDY]
     ✓ Verify key provided to return object. [NDY]
 
   Nimis | Return object data structure
-    ✓ Prepare test file 1.
-    ✓ Prepare test file 2.
-    ✓ iHash
-    ✓ cHash (59ms)
+    ✓ iHash (51ms)
+    ✓ cHash
     ✓ FnC
     ✓ FnI
     ✓ COMPLETE object
@@ -106,13 +104,10 @@ You can test the Nimis build by running `npm run test`, which will produce the b
     ✓ Check file system is correctly reporting non-existant files.
     ✓ Create new test file.
     ✓ Check hash of test file.
-    ✓ Delete test file from system.
 
   Gzip System
     ✓ Check gzip functionality with test file.
     ✓ Check gzip file integrity.
-    ✓ Delete original test file from system.
-    ✓ Delete gzip test file from system.
 
   Zip System
     ✓ Create new test file.
@@ -120,15 +115,8 @@ You can test the Nimis build by running `npm run test`, which will produce the b
     ✓ Zip new test gzip file.
     ✓ Check zip file integrity. [NDY]
 
-  Clean up
-    ✓ Delete original test file.
-    ✓ Delete gzip test file.
-    ✓ Delete zip test file.
-    ✓ Delete test file 1 for object structure testing.
-    ✓ Delete test file 2 for object structure testing.
 
-
-  35 passing (198ms)
+  25 passing (195ms)
 ```
 
 Tests that are currently not developed or ready yet have `[NDY]` at the end of their description. 
