@@ -30,9 +30,50 @@ npm init
 
 The default backup directory for Nimis is /backups/ - you must ensure that this directory exists or you must specify your own directory. 
 
+### Quick start (example)
+
+#### Execution 
+```
+let nimis = require('./nimis.js').backup; 
+
+(async () => {
+   try{
+       let bar = await nimis(['fileToBackUp.md', 'secondFileToBackUp.md']); 
+        console.log(bar);
+       
+   } catch(err){
+        console.error(err);
+    } 
+    
+})(); 
+```
+
+#### Result
+
+```
+{ p0: 
+   { iHash: 'e7a555eb3f7c27327a21ae7e48a7481c9543efd68d7c92a080318acbfd4cae1cfa4d8fd3bcd05d3e51702f6f68112442a2ace378317cbd394a9a5bbf71714f42',
+     cHash: '286729de6406b8b5a5e1d800259e54a9ae7e198ad4c8a45468baf72300195c26723c0505c0a7e682ec8ec8374b8743778c295663a334607521fb76a24c6a6361',
+     FnI: 'fileToBackUp.md',
+     FnC: '82830dd28b38622a05efbef62346ebbf47f7b7b3.json.gz' },
+  p1: 
+   { iHash: '47690a5884998f96e5430169368e01c661316e4fa09f0388359e6b3084bff17c392f2872e76378e16ce228e62ec01399e8ed096af67bf5ecdf49198b0e0bb503',
+     cHash: 'b167d995128a0efe0365460b063b7465fb607d01e6397de327819063386eb17912237ea086f085277a0991facb03156803e7b6cb3dece58a87c36c30e43395d7',
+     FnI: 'secondFileToBackUp.md',
+     FnC: 'f100f1fe700af678835f12b384794c9fbd91f402.md.gz' }
+  COMPLETE: 
+   { hash: '86ce482199958e5cc0f2a3f2d1becbe269a28e106519c203e35ad5c13655d33f881f4dedb498481dea9b4ff1b3aa377d2f083210c6cb13a0543c6c0ee90123e1',
+     fileName: '0413cc052b1a2629fa4594605e05470a4674b30b.zip',
+     key: 'e3862a0a8a6c2aa9c57228157501bc59b1da14e6e214797fe3fb5a63e5c3' } }
+```
+
+The files will be backed up to the `/backups/` directory by default. The user may then use the `key` property, provided as `bar.COMPLETE.key` (in the case of the example above) - the filename of the zip can be found as the `bar.COMPLETE.fileName` property, in the case of the example above.
+
+
+
 ### Testing 
 
-You can test the Nimis build by running `npm run test`, which will produce the tests - an example is below. 
+You can test the Nimis build by running `npm run test`, which will produce the behaviour tests - an example is below. 
 
 ```
   Nimis (backup)
@@ -90,7 +131,7 @@ You can test the Nimis build by running `npm run test`, which will produce the t
   35 passing (198ms)
 ```
 
-Tests that are currently not developed or ready yet have '[NDY]' at the end of their description. 
+Tests that are currently not developed or ready yet have `[NDY]` at the end of their description. 
 
 
 ## Execution
@@ -164,9 +205,12 @@ As you can see, multiple files can be sent as an array. Nimis will return object
 
 Once your files have been hashed, compressed and hashed again, Nimis will then compress the the GZIP files into one main zip file, providing encryption in the process. The `COMPLETE` object also contains the `hash` which is the hash of the final zip file, the `fileName` object property, which contains the file name of the zip and the `key` object which contains the password to the zip file. 
 
-These are both currently stored in the /backups/ directory. 
+The final output zip is stored in the `/backups/` directory.
 
-TO DO: Build config setup utility to pre-define directory. 
+`WARNING`
+
+The security provided older zip versions contains serious security flaws. It's highly reccomended that the user check their operating systems zip version to ensure it is a modern one and as such, ensure that it uses the AES encryption standard. 
+
 
 #### Errors
 
@@ -249,6 +293,7 @@ Due to the asynchronous nature of Nimis, your application must also be asynchron
 
 ```
 1. Do more error checking. 
+2. Check when 2 or more of the same files are sent to Nimis. 
 
 ```
 
