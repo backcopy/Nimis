@@ -45,8 +45,8 @@ let deleteFile = (fileName) => {
     })
 }; 
 
- 
-describe('Nimis (backup)', () =>{
+
+describe('Nimis', () =>{
     
 it('Verify nimis initial file integrity checking. [NDY]', async () => {
 
@@ -70,21 +70,18 @@ it('Verify key provided to return object. [NDY]', async () => {
 
 describe('Nimis | Return object data structure', () =>{
     
-it('Prepare test file 1.', async() => {
-   createFile('backups/exampleFile01.txt'); 
-   let result = await fileStat('backups/exampleFile01.txt');
-    
-    expect(result).to.equal('OK');
-})   
-    
-it('Prepare test file 2.', async() => {
-   createFile('backups/exampleFile02.txt'); 
-      let result = await fileStat('backups/exampleFile02.txt');
-    
-    expect(result).to.equal('OK');
+before(async () =>{
+ createFile('backups/exampleFile01.txt'); 
+ createFile('backups/exampleFile02.txt');    
 })
     
+after(async () => {
+    let result1 = await deleteFile('backups/exampleFile01.txt'); 
+    let result2 = await deleteFile('backups/exampleFile02.txt');
+
+})
     
+
 it('iHash', async() => {
     let result = await nimis(['backups/exampleFile01.txt', 'backups/exampleFile02.txt'])
         await deleteFile(`backups/${result.COMPLETE.fileName}`); // delete output zip for cleanup purposes.
@@ -171,6 +168,10 @@ const result = await randomDataGen();
 
 describe('File System', () =>{
     
+after( async() =>{
+    await deleteFile('nimisTestFile.txt'); 
+})
+    
 it('Check /backups/ directory exists.', async () => {
         let result = await fileStat('backups/'); 
             expect(result).to.equal('OK');
@@ -203,18 +204,15 @@ it('Check hash of test file.', async () =>{
         let testFileHash = await hash('nimisTestFile.txt'); 
         
         expect(testFileHash).to.equal(resultResolve);
-});
-    
-it('Delete test file from system.', async () => {
-    await deleteFile('nimisTestFile.txt'); 
-    let result = await fileStat('nimisTestFile.txt');
-    
-    expect(result).to.equal('FAIL');
-});
-    
+    });
 }); 
 
 describe('Gzip System', () =>{
+    
+after( async() =>{
+   await deleteFile('nimisTestFile.txt'); 
+   await deleteFile('nimisTestFileGzip.txt.gz'); 
+})
 
 it('Check gzip functionality with test file.', async () => {
         await createFile(); 
@@ -233,26 +231,16 @@ it('Check gzip file integrity.', async () => {
 
     
     expect(resultResolve).to.equal(gzipFileHash);
-});
-
-    
-it('Delete original test file from system.', async () => {
-    await deleteFile('nimisTestFile.txt'); 
-    let result = await fileStat('nimisTestFile.txt');
-    
-    expect(result).to.equal('FAIL');
-});
-    
-it('Delete gzip test file from system.', async () => {
-    await deleteFile('nimisTestFileGzip.txt.gz'); 
-    let result = await fileStat('nimisTestFileGzip.txt.gz');
-    
-    expect(result).to.equal('FAIL');
-});
-    
+}); 
 }); 
 
 describe('Zip System', () =>{
+    
+after( async() =>{
+    await deleteFile('nimisTestFile1.txt');
+    await deleteFile('nimisTestFileGzip1.txt.gz'); 
+    await deleteFile('backups/zipTest1.zip'); 
+})
 
 it('Create new test file.', async () => {
     await createFile('nimisTestFile1.txt');
@@ -284,41 +272,5 @@ it('Check zip file integrity. [NDY]', async () => {
 }); 
 
 
-describe('Clean up', () =>{
-   it('Delete original test file.', async () => {
-    await deleteFile('nimisTestFile1.txt'); 
-    let result = await fileStat('nimisTestFile1.txt');
-    
-    expect(result).to.equal('FAIL');       
-});
 
-it('Delete gzip test file.', async () => {
-    await deleteFile('nimisTestFileGzip1.txt.gz'); 
-    let result = await fileStat('nimisTestFileGzip1.txt.gz');
-    
-    expect(result).to.equal('FAIL');       
-});
-    
-it('Delete zip test file.', async () => {
-    await deleteFile('backups/zipTest1.zip'); 
-    let result = await fileStat('backups/zipTest1.zip');
-    
-    expect(result).to.equal('FAIL');       
-});
-    
-it('Delete test file 1 for object structure testing.', async () => {
-    await deleteFile('backups/exampleFile01.txt'); 
-    let result = await fileStat('backups/exampleFile01.txt');
-    
-    expect(result).to.equal('FAIL');       
-});
-    
-it('Delete test file 2 for object structure testing.', async () => {
-    await deleteFile('backups/exampleFile02.txt'); 
-    let result = await fileStat('backups/exampleFile02.txt');
-    
-    expect(result).to.equal('FAIL');       
-});
-    
-});
 
