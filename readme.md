@@ -8,7 +8,7 @@ Nimis provides you with built in features such as compression, encryption, dual 
 
 ## Notice
 
-Nimis is not yet stable for production release, use at your own risk.
+Nimis is not yet stable for production environments, use at your own risk.
 
 ## Requirements
 
@@ -97,11 +97,14 @@ This is the 40 character uniquely generated encryption key used to encrypt and d
 
 ## Features
 
-* Coming soon.
-    * Coming soon.
-* Coming soon.
-    * Coming soon.
-    * Coming soon.
+* Compression 
+    * Compression at the highest level is provided by the zlib library, included and enabled with Nimis by default. 
+* Double integrity checking 
+    * Files are gzipped and then zipped, providing dual layer integrity checking to ensure no malicious modification or corruption has occoured. 
+* Encryption 
+    * Encryption is provided by the zip library, this is further increased by the Nimis module through the utilization of a long and uniquely generated 40 charecter key.
+* Asynchronous 
+    * Asynchronous code bundled with promises are used to ensure I/O performance is kept as high as possible.
 
 ## Meta
 
