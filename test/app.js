@@ -1,5 +1,6 @@
 const fs = require('fs'); 
 const crypto = require('crypto');
+const execFile = require('child_process').execFile;
 
 const assert = require('chai').assert; 
 const expect = require('chai').expect;
@@ -46,27 +47,103 @@ let deleteFile = (fileName) => {
 }; 
 
 
+// <== OPEN ZIP/BINDED FILES ==> 
+
+async function openBindFile(zipFilePath, dest, decryptionKey){
+        
+    // EC - Check the incoming data path exists 
+    let folderStatus = await fileStat(zipFilePath); 
+    
+    if (folderStatus === 'OK'){
+          return new Promise((resolve, reject) => {
+          execFile('unzip', ['-P', decryptionKey, zipFilePath, '-d', dest], function(err, stdout) {
+        
+    if(err){
+        console.error('THE ZIP FILE SYSTEM HAS ENCOUNTERED AN ERROR - ', err); 
+            reject(err); 
+    }
+
+    resolve();
+});              
+    
+                
+}) 
+    } else if (folderStatus === 'FAIL'){
+        throw 'FILE NOT FOUND, BIND MODULE ERROR.';
+    } else {
+        throw 'THE BIND MODULE HAS ENCOUNTERED A CRITICAL ERROR.';
+    } 
+} 
+
+
 describe('Nimis', () =>{
     
 it('Verify nimis initial file integrity checking. [NDY]', async () => {
 
     
+ 
+    
 });
     
-it('Verify nimis gzip file integrity checking. [NDY]', async () => {
-        
-});
-
     
 it('Verify Nimis with multiple randomized files. [NDY]', async () => {
         
 });
     
-it('Verify key provided to return object. [NDY]', async () => {
-        
-});
+
   
 });
+
+describe('Nimis | File integrity checking', () =>{
+
+it('Verify gzip file (post extraction) integrity [FILE 1]', async () => {
+ await createFile('backups/exampleFileIntegrityCheck01.txt'); 
+ await createFile('backups/exampleFileIntegrityCheck02.txt');
+
+    
+    
+ let result = await nimis(['backups/exampleFileIntegrityCheck01.txt', 'backups/exampleFileIntegrityCheck02.txt']);
+       
+ 
+
+ await openBindFile(`backups/${result.COMPLETE.fileName}`, 'backups/', result.COMPLETE.key); 
+
+await deleteFile('backups/exampleFileIntegrityCheck01.txt');
+await deleteFile('backups/exampleFileIntegrityCheck02.txt');
+    let testFileHash = await hash(`backups/${result.p0.FnC}`); 
+    
+    expect(result.p0.cHash).to.equal(testFileHash); 
+    
+// CLEANUP 
+    await deleteFile(`backups/${result.p0.FnC}`);  
+    await deleteFile(`backups/${result.p1.FnC}`); 
+    await deleteFile(`backups/${result.COMPLETE.fileName}`);
+}); 
+    
+it('Verify gzip file (post extraction) integrity [FILE 2]', async () => {
+ await createFile('backups/exampleFileIntegrityCheck01.txt'); 
+ await createFile('backups/exampleFileIntegrityCheck02.txt');
+
+    
+    
+ let result = await nimis(['backups/exampleFileIntegrityCheck01.txt', 'backups/exampleFileIntegrityCheck02.txt']);
+       
+ 
+
+ await openBindFile(`backups/${result.COMPLETE.fileName}`, 'backups/', result.COMPLETE.key); 
+
+await deleteFile('backups/exampleFileIntegrityCheck01.txt');
+await deleteFile('backups/exampleFileIntegrityCheck02.txt');
+    let testFileHash = await hash(`backups/${result.p0.FnC}`); 
+    
+    expect(result.p0.cHash).to.equal(testFileHash); 
+    
+// CLEANUP 
+    await deleteFile(`backups/${result.p0.FnC}`);  
+    await deleteFile(`backups/${result.p1.FnC}`); 
+    await deleteFile(`backups/${result.COMPLETE.fileName}`);
+}); 
+}); 
 
 describe('Nimis | Return object data structure', () =>{
     
@@ -163,7 +240,31 @@ const result = await randomDataGen();
     expect(result).to.have.lengthOf(40);           
 });
     
+it('Verify encryption key provided to return object is functional.', async () => {
+ await createFile('backups/exampleFileEncryptionKeyTest01.txt'); 
+ await createFile('backups/exampleFileEncryptionKeyTest02.txt'); 
 
+ let result = await nimis(['backups/exampleFileEncryptionKeyTest01.txt', 'backups/exampleFileEncryptionKeyTest02.txt']);
+       
+ 
+
+ await openBindFile(`backups/${result.COMPLETE.fileName}`, 'backups/', result.COMPLETE.key); 
+
+await deleteFile('backups/exampleFileEncryptionKeyTest01.txt');
+await deleteFile('backups/exampleFileEncryptionKeyTest02.txt');
+    
+    let finalResult = await fileStat(`backups/${result.p0.FnC}`);
+        
+        expect(finalResult).to.equal('OK');
+    
+     
+    
+// CLEANUP 
+    await deleteFile(`backups/${result.p0.FnC}`);  
+    await deleteFile(`backups/${result.p1.FnC}`); 
+    await deleteFile(`backups/${result.COMPLETE.fileName}`);       
+});
+    
 }); 
 
 describe('File System', () =>{
@@ -263,12 +364,7 @@ it('Zip new test gzip file.', async () => {
     let result = await fileStat('backups/zipTest1.zip');
     
     expect(result).to.equal('OK');
-});
-  
-it('Check zip file integrity. [NDY]', async () => {
-    // NOT POSSIBLE WITHOUT THE REBUILD SYSTEM. 
-});
-    
+});   
 }); 
 
 

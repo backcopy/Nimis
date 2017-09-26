@@ -1,301 +1,112 @@
 ![main logo](https://i.imgur.com/hWe5gZi.png?raw=true "Main Logo")
+> Nimis is an asynchronous NodeJS backup utility with built-in secure hashing and encryption. 
 
-Nimis is a barebones, highly versatile, NodeJS asynchronous backup utility with built-in secure hashing.
 
-## Warning
+Nimis is built on a highly modulated code base to provide you with a high level of customisation to fit your needs. Coded in the latest and greatest asynchronous style, designed for maximum I/O performance. 
 
-This project is under development and should not in any way be used in a production environment. 
+Nimis provides you with built in features such as compression, encryption, dual layer integrity checking and more. 
 
-## Getting Started
+## Notice
 
-Nimis contains only what's most needed and as such it naturally requires you to plug in most of your own application. Feel free to modify it in order to suit your needs. 
+Nimis is not yet stable for production release, use at your own risk.
 
-### Prerequisites
+## Requirements
 
-Depedencies required for Nimis to function properly. 
+* CentOS 7 
+* NodeJS 8.5.0 
+* Zip & Unzip utility (operating system) 
 
-```
-1. NodeJS (8.5.0)
-2. Zip utility
-    2.1 - Tested in a development environment with CentOS 7. 
-```
+## Getting started
 
-### Installing
 
-Installing the Nimis utility is quite simple, just pull a copy of this repository and intilize the npm package.
+Pull a copy of this repository: 
 
 ```
-npm init 
+git clone https://github.com/edinjusupovic/Nimis.git
 ```
 
-The default backup directory for Nimis is /backups/ - you must ensure that this directory exists or you must specify your own directory. 
-
-### Quick start (example)
-
-#### Execution 
-```
-let nimis = require('./nimis.js').backup; 
-
-(async () => {
-   try{
-       let bar = await nimis(['fileToBackUp.md', 'secondFileToBackUp.md']); 
-        console.log(bar);
-       
-   } catch(err){
-        console.error(err);
-    } 
-    
-})(); 
-```
-
-#### Result
+Initialise Nimis with npm: 
 
 ```
-{ p0: 
-   { iHash: 'e7a555eb3f7c27327a21ae7e48a7481c9543efd68d7c92a080318acbfd4cae1cfa4d8fd3bcd05d3e51702f6f68112442a2ace378317cbd394a9a5bbf71714f42',
-     cHash: '286729de6406b8b5a5e1d800259e54a9ae7e198ad4c8a45468baf72300195c26723c0505c0a7e682ec8ec8374b8743778c295663a334607521fb76a24c6a6361',
-     FnI: 'fileToBackUp.md',
-     FnC: '82830dd28b38622a05efbef62346ebbf47f7b7b3.json.gz' },
-  p1: 
-   { iHash: '47690a5884998f96e5430169368e01c661316e4fa09f0388359e6b3084bff17c392f2872e76378e16ce228e62ec01399e8ed096af67bf5ecdf49198b0e0bb503',
-     cHash: 'b167d995128a0efe0365460b063b7465fb607d01e6397de327819063386eb17912237ea086f085277a0991facb03156803e7b6cb3dece58a87c36c30e43395d7',
-     FnI: 'secondFileToBackUp.md',
-     FnC: 'f100f1fe700af678835f12b384794c9fbd91f402.md.gz' },
-  COMPLETE: 
-   { hash: '86ce482199958e5cc0f2a3f2d1becbe269a28e106519c203e35ad5c13655d33f881f4dedb498481dea9b4ff1b3aa377d2f083210c6cb13a0543c6c0ee90123e1',
-     fileName: '0413cc052b1a2629fa4594605e05470a4674b30b.zip',
-     key: 'e3862a0a8a6c2aa9c57228157501bc59b1da14e6e214797fe3fb5a63e5c3' } }
+npm install -y
 ```
 
-The files will be backed up to the `/backups/` directory by default. The user may then use the `key` property, provided as `bar.COMPLETE.key` (in the case of the example above) - the filename of the zip can be found as the `bar.COMPLETE.fileName` property, in the case of the example above.
-
-
-
-### Testing 
-
-You can test the Nimis build by running `npm run test`, which will produce the behaviour tests - an example is below. 
+Run the built-in tests to ensure operatability: 
 
 ```
-  Nimis
-    ✓ Verify nimis initial file integrity checking. [NDY]
-    ✓ Verify nimis gzip file integrity checking. [NDY]
-    ✓ Verify Nimis with multiple randomized files. [NDY]
-    ✓ Verify key provided to return object. [NDY]
-
-  Nimis | Return object data structure
-    ✓ iHash (51ms)
-    ✓ cHash
-    ✓ FnC
-    ✓ FnI
-    ✓ COMPLETE object
-    ✓ COMPLETE.hash
-    ✓ COMPLETE.fileName
-    ✓ COMPLETE.key
-
-  Environment System
-    ✓ Check for working zip utility. [NDY]
-
-  Security System
-    ✓ Generate random data for Nimis.
-
-  File System
-    ✓ Check /backups/ directory exists.
-    ✓ Check file system is correctly reporting non-existant directories.
-    ✓ Check file system is correctly reporting non-existant files.
-    ✓ Create new test file.
-    ✓ Check hash of test file.
-
-  Gzip System
-    ✓ Check gzip functionality with test file.
-    ✓ Check gzip file integrity.
-
-  Zip System
-    ✓ Create new test file.
-    ✓ Gzip and compress new test file.
-    ✓ Zip new test gzip file.
-    ✓ Check zip file integrity. [NDY]
-
-
-  25 passing (195ms)
+npm run test
 ```
 
-Tests that are currently not developed or ready yet have `[NDY]` at the end of their description. 
+## Usage example
 
-
-## Execution
-
-#### Nimis initialization
+Include Nimis in your project: 
 
 ```
-let nimis = require('./nimis.js').backup; 
+const nimis = require('./nimis.js').backup;
 ```
 
-#### Nimis example
-
-You're required to send an array of file names to Nimis - you must include the complete path. This is likely going to undergo some more development soon to fix a few potential bugs. 
+Execute Nimis in your project: 
 
 ```
-nimis(['file1.js', 'file2.js']);
+nimis(['fileToBackUp.md', 'secondFileToBackUp.md']);
 ```
 
-#### Nimis reply 
-Nimis will then reply with the objects containing your hashes. Both the initial file and the compressed file hashes will be provided, along with the output file name - which is uniquely generated by Nimis. Properties such as the initial file name are also included to assist in rebuilding your initial file from secure storage. 
+Nimis will reply with the return object: 
+
+The reply can be seen [HERE.](https://pastebin.com/raw/T9TfyhNi) 
 
 
-`iHash`
+_Nimis must be executed in a asynchronous style or it will not work, please see [THIS](https://pastebin.com/raw/KKx0UYFi)  for an execution example._
 
+## Nimis object explained
+
+This part of the readme will explain the objects returned by Nimis.
+
+```iHash```
 
 The iHash object contains your initial hash, this is the hash of the initial file provided to Nimis, which can later be used to ensure that the compressed version contains the correct file. 
 
-
-`cHash`
-
+```cHash```
 
 The zipHash object contains your compressed/gzip file hash.
 
-`FnI`
-
+```FnI```
 
 The fileNameInitial, or FnI object contains the inital file name, which can later be used to rebuild the initial file. The FnI property also contains the initial file path along with the full file name and extension. 
 
-`FnC`
+```FnC```
+
+The fileNameCompressed, or FnC object contains the gzipped/compressed file name. This is uniquely generated by Nimis and stored in the /backups/ directory. Please note that all file extensions are preserved and include the .gz extension. 
 
 
-The fileNameCompressed, or FnC object contains the zipped/compressed file name. This is uniquely generated by Nimis and stored in the /backups/ directory. Please note that all file extensions are preserved and include the .gz extension. 
+```COMPLETE```
 
+The object that contains the final data properties, provided only when Nimis has zipped all files. 
 
-```
-{ p0: 
-   { iHash: 'e7a555eb3f7c27327a21ae7e48a7481c9543efd68d7c92a080318acbfd4cae1cfa4d8fd3bcd05d3e51702f6f68112442a2ace378317cbd394a9a5bbf71714f42',
-     cHash: '286729de6406b8b5a5e1d800259e54a9ae7e198ad4c8a45468baf72300195c26723c0505c0a7e682ec8ec8374b8743778c295663a334607521fb76a24c6a6361',
-     FnI: 'package.json',
-     FnC: '82830dd28b38622a05efbef62346ebbf47f7b7b3.json.gz' },
-  p1: 
-   { iHash: '47690a5884998f96e5430169368e01c661316e4fa09f0388359e6b3084bff17c392f2872e76378e16ce228e62ec01399e8ed096af67bf5ecdf49198b0e0bb503',
-     cHash: 'b167d995128a0efe0365460b063b7465fb607d01e6397de327819063386eb17912237ea086f085277a0991facb03156803e7b6cb3dece58a87c36c30e43395d7',
-     FnI: 'readme.md',
-     FnC: 'f100f1fe700af678835f12b384794c9fbd91f402.md.gz' },
-  p2: 
-   { iHash: 'eec63369ef956e9c31f4ae7db33672edc6f82555cdffe0a1be6c02f8eeacda0872d6ccf82cb3f78f4266d33c2be7493d585fe58f2e5db984b8501804d90fe6ef',
-     cHash: 'c647063f348c0b98ab098dcf27dede177e45ae153281bea06a1c92f3dd4c2a45a741747fa8c3673c158d5867aed8860c68c11bcf4d5604a119cabafef36a9996',
-     FnI: 'package-lock.json',
-     FnC: 'f4c68d1e1b8d06cf4a4a376c3bf6fd9917805326.json.gz' },
-  COMPLETE: 
-   { hash: '86ce482199958e5cc0f2a3f2d1becbe269a28e106519c203e35ad5c13655d33f881f4dedb498481dea9b4ff1b3aa377d2f083210c6cb13a0543c6c0ee90123e1',
-     fileName: '0413cc052b1a2629fa4594605e05470a4674b30b.zip',
-     key: 'e3862a0a8a6c2aa9c57228157501bc59b1da14e6e214797fe3fb5a63e5c3' } }
-```
+```COMPLETE.hash```
 
-As you can see, multiple files can be sent as an array. Nimis will return objects, such as p0, p1, p2 and so forth, based on the files provided to Nimis. 
+This is the hash of the final zip file, where all the files provided to Nimis have been stored in. 
 
+```COMPLETE.fileName```
 
-`COMPLETE` 
+This is the file name of the final zip file. 
 
-Once your files have been hashed, compressed and hashed again, Nimis will then compress the the GZIP files into one main zip file, providing encryption in the process. The `COMPLETE` object also contains the `hash` which is the hash of the final zip file, the `fileName` object property, which contains the file name of the zip and the `key` object which contains the password to the zip file. 
+```COMPLETE.key```
 
-The final output zip is stored in the `/backups/` directory.
+This is the 40 character uniquely generated encryption key used to encrypt and decrypt the final file.
 
-`WARNING`
+## Features
 
-The security provided older zip versions contains serious security flaws. It's highly reccomended that the user check their operating systems zip version to ensure it is a modern one and as such, ensure that it uses the AES encryption standard. 
+* Coming soon.
+    * Coming soon.
+* Coming soon.
+    * Coming soon.
+    * Coming soon.
 
+## Meta
 
-#### Errors
+Coming soon.
 
-Here is an example of an error where 1/3 of the files sent to Nimis did not exist.
+## Contributing
 
-```
-{ p0: 
-   { iHash: 'e7a555eb3f7c27327a21ae7e48a7481c9543efd68d7c92a080318acbfd4cae1cfa4d8fd3bcd05d3e51702f6f68112442a2ace378317cbd394a9a5bbf71714f42',
-     cHash: '286729de6406b8b5a5e1d800259e54a9ae7e198ad4c8a45468baf72300195c26723c0505c0a7e682ec8ec8374b8743778c295663a334607521fb76a24c6a6361',
-     FnI: 'package.json',
-     FnC: '1a68c8625cf76cde09f198215f7ab2b891bef8ee.json.gz' },
-  p1: { error: 'FILE NOT FOUND' },
-  p2: 
-   { iHash: 'eec63369ef956e9c31f4ae7db33672edc6f82555cdffe0a1be6c02f8eeacda0872d6ccf82cb3f78f4266d33c2be7493d585fe58f2e5db984b8501804d90fe6ef',
-     cHash: 'c647063f348c0b98ab098dcf27dede177e45ae153281bea06a1c92f3dd4c2a45a741747fa8c3673c158d5867aed8860c68c11bcf4d5604a119cabafef36a9996',
-     FnI: 'package-lock.json',
-     FnC: '3bef38cc041f93e99c45851242041ecd3d377e94.json.gz' },
-  COMPLETE: 
-   { hash: 'c6d16d4557cac060026213d5f3f12fc749af1ec7504fbf90f8d5debdb91c913d7ea7a656fea7b6e62660ad391baea1a3036d53da6b2b49d58ac7243d994abfd9',
-     fileName: '85bacd593e32740e85142f3f39aeb609cafcc785.zip',
-     key: '23f18278753d9f9a16a3a53fd953d1d17e739684d7f0712b6e6aac3de1a8' } }
-```
-
-
-#### Asynchronous execution
-Below is an example of how to asynchronously execute Nimis. 
-
-```
-let nimis = require('./nimis.js').backup; 
-
-async function foo(){
-   try{
-       let bar = await nimis(['read1me.md', 'kek.js']); 
-        console.log(bar);
-       
-   } catch(err){
-        console.error(err);
-    } 
-    
-}; 
-
-foo();
-```
-
-## Technical 
-
-A preview of the technical inner workings of Nimis. 
-
-#### Pre Hash Stage 
-
-Nimis will take the intial file provided and hash it. 
-
-#### Compression Stage 
-
-Nimis will take the intial file and compress it using gzip with level 9 compression.
-
-#### Post Hash Stage 
-
-Nimis will then hash the compressed (gzip) file. 
-
-#### Bind Stage 
-
-If Nimis has been provided multiple files, it will bind all those files into one main zip, for easier storage. 
-
-#### Bind Stage (Extended - Encryption)
-
-Nimis will construct a 40 charecter unique key and apply it as the password to the final zip file. 
-
-#### Bind Hashing Stage 
-
-Nimis will then hash the .zip file and provide it back to you as the `COMPLETE` property, containing the `hash` property, `fileName` property and the `key` property. 
-
-
-## Deployment
-
-Due to the asynchronous nature of Nimis, your application must also be asynchronous and as such, must also execute nimis asynchronously. Failure to do so will result in critical errors. 
-
-
-## To do list
-
-```
-1. Do more error checking. 
-2. Check when 2 or more of the same files are sent to Nimis. 
-
-```
-
-## Versioning
-
-* v1.0.0 (current) 
-
-## Authors
-
-* **Edin Jusupovic** 
-
-
-## License
-
-Coming soon!
-
-
+Coming soon.
