@@ -1,4 +1,4 @@
-![main logo](https://i.imgur.com/hWe5gZi.png?raw=true "Main Logo")
+# Nimis 
 > Nimis is an asynchronous NodeJS backup utility with built-in secure hashing and encryption. 
 
 
@@ -102,14 +102,29 @@ This is the 40 character uniquely generated encryption key used to encrypt and d
 * Double integrity checking 
     * Files are gzipped and then zipped, providing dual layer integrity checking to ensure no malicious modification or corruption has occoured. 
 * Encryption 
-    * Encryption is provided by the zip library, this is further increased by the Nimis module through the utilization of a long and uniquely generated 40 charecter key.
+    * Encryption is provided by the zip library, this is further increased by the Nimis module through the utilization of a long and uniquely generated 40 charecter key. `WARNING` the encryption used by your operating systems zip module may not be secure enough for your implimentation.
 * Asynchronous 
     * Asynchronous code bundled with promises are used to ensure I/O performance is kept as high as possible.
 
-## Meta
+## Structure
 
-Coming soon.
+Nimis returns the main object once it has completed backup procedures. All files sent to Nimis are allocated properties in the order they were sent to Nimis. Properties start at `p0` and are infinite. 
 
-## Contributing
 
-Coming soon.
+## Errors
+
+* Files provided to Nimis do not exist 
+    * Nimis will continue backing up other files and return an object as an error in the place of the non-existant file object property, you can see an example [HERE](https://pastebin.com/raw/X32inAHH).
+    * Nimis will not attempt to back up anything if it detects that all files provided to Nimis do not exist, you can see an example of the reply from the command line [HERE](https://pastebin.com/raw/anDymzSm).
+
+* %temp% directory is not accessible
+    * Nimis will not execute and will throw an error at the command line. 
+    
+* /backups/ directory is not accessible
+    * Nimis will not execute and will throw an error at the command line. 
+    
+* Unable to access zip utilities on the operating system 
+    * Nimis will not execute and will throw an error at the command line.
+
+* Two of the same files are sent to Nimis 
+    * Nimis will gzip and hash each file and zip it without any errors. 
