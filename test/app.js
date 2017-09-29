@@ -1,6 +1,5 @@
 const fs = require('fs'); 
 const crypto = require('crypto');
-const execFile = require('child_process').execFile;
 
 const assert = require('chai').assert; 
 const expect = require('chai').expect;
@@ -10,89 +9,16 @@ let hash = require('../lib/hash_module.js').File;
 let zip = require('../lib/zip_module.js').File;
 let bindFiles = require('../lib/bind_module.js').c; 
 
+const randomDataGen = require('../test/lib/securityFn.js').randomDataGen; 
+const createFile = require('../test/lib/fileFn.js').createFile; 
+const deleteFile = require('../test/lib/fileFn.js').deleteFile; 
+const openBindFile = require('../test/lib/fileFn.js').openBindFile; 
+const openGzipFile = require('../test/lib/fileFn.js').openGzipFile;
+
+
+
 let nimis = require('../nimis.js').backup; 
 
-// <== GENERATE RANDOM DATA ==> 
-let randomDataGen = () => {
-    return new Promise((resolve, reject) => {
-          crypto.randomBytes(20, (err, buf) => {
-            if (err) reject(err);
-              let returnData = buf.toString('hex'); 
-                  resolve(returnData); 
-        });                                   
-    }) 
-}; 
-
-
-// <== CREATE NEW FILE ==> 
-let createFile = (fileName = "nimisTestFile.txt") => {
-    return new Promise((resolve, reject) => {
-        let stream = fs.createWriteStream(fileName);
-        stream.once('open', (fd) => {
-            stream.write("FOO_BAR");
-                stream.end(resolve());
-        });
-    })  
-}
-
-
-// <== DELETE FILE ==> 
-let deleteFile = (fileName) => {
-    return new Promise((resolve, reject) => {
-        fs.unlink(fileName, (err) => {
-            if (err) throw err;
-                resolve();
-        });
-    })
-}; 
-
-
-// <== OPEN ZIP/BINDED FILES ==> 
-
-async function openBindFile(zipFilePath, dest, decryptionKey){
-        
-    // EC - Check the incoming data path exists 
-    let folderStatus = await fileStat(zipFilePath); 
-    
-    if (folderStatus === 'OK'){
-          return new Promise((resolve, reject) => {
-          execFile('unzip', ['-P', decryptionKey, zipFilePath, '-d', dest], function(err, stdout) {
-        
-    if(err){
-        console.error('THE ZIP FILE SYSTEM HAS ENCOUNTERED AN ERROR - ', err); 
-            reject(err); 
-    }
-
-    resolve();
-});              
-    
-                
-}) 
-    } else if (folderStatus === 'FAIL'){
-        throw 'FILE NOT FOUND, BIND MODULE ERROR.';
-    } else {
-        throw 'THE BIND MODULE HAS ENCOUNTERED A CRITICAL ERROR.';
-    } 
-} 
-
-
-describe('Nimis', () =>{
-    
-it('Verify nimis initial file integrity checking. [NDY]', async () => {
-
-    
- 
-    
-});
-    
-    
-it('Verify Nimis with multiple randomized files. [NDY]', async () => {
-        
-});
-    
-
-  
-});
 
 describe('Nimis | File integrity checking', () =>{
 
@@ -143,6 +69,62 @@ await deleteFile('backups/exampleFileIntegrityCheck02.txt');
     await deleteFile(`backups/${result.p1.FnC}`); 
     await deleteFile(`backups/${result.COMPLETE.fileName}`);
 }); 
+    
+it('Verify hash of initial file provided to Nimis matches unzipped + gunzipped version [FILE 1]', async () => {
+ await createFile('backups/exampleFileIntegrityCheckInitial01.txt'); 
+ await createFile('backups/exampleFileIntegrityCheckInitial02.txt');
+    
+    let result = await nimis(['backups/exampleFileIntegrityCheckInitial01.txt', 'backups/exampleFileIntegrityCheckInitial02.txt']);
+    
+    await openBindFile(`backups/${result.COMPLETE.fileName}`, 'backups/', result.COMPLETE.key); 
+    
+await deleteFile('backups/exampleFileIntegrityCheckInitial01.txt');
+await deleteFile('backups/exampleFileIntegrityCheckInitial02.txt');
+ 
+// FILE EXTENSION CONVERSION FROM FILE-NAME._EXTENSION_.GZ to normal file name. 
+let newFileName = result.p0.FnC.slice(0, result.p0.FnC.lastIndexOf('.'));
+    
+    await openGzipFile(`backups/${result.p0.FnC}`); 
+    
+    let initialHashOfFile = await hash(`backups/${newFileName}`); 
+    
+    
+    expect(result.p0.iHash).to.equal(initialHashOfFile); 
+    
+    // CLEANUP 
+    await deleteFile(`backups/${result.p1.FnC}`);  
+    await deleteFile(`backups/${result.COMPLETE.fileName}`);
+    await deleteFile(`backups/${newFileName}`);
+    }); 
+    
+it('Verify hash of initial file provided to Nimis matches unzipped + gunzipped version [FILE 2]', async () => {
+ await createFile('backups/exampleFileIntegrityCheckInitial01.txt'); 
+ await createFile('backups/exampleFileIntegrityCheckInitial02.txt');
+    
+    let result = await nimis(['backups/exampleFileIntegrityCheckInitial01.txt', 'backups/exampleFileIntegrityCheckInitial02.txt']);
+    
+    await openBindFile(`backups/${result.COMPLETE.fileName}`, 'backups/', result.COMPLETE.key); 
+    
+await deleteFile('backups/exampleFileIntegrityCheckInitial01.txt');
+await deleteFile('backups/exampleFileIntegrityCheckInitial02.txt');
+ 
+// FILE EXTENSION CONVERSION FROM FILE-NAME._EXTENSION_.GZ to normal file name. 
+let newFileName = result.p1.FnC.slice(0, result.p1.FnC.lastIndexOf('.'));
+    
+    await openGzipFile(`backups/${result.p1.FnC}`); 
+    
+    let initialHashOfFile = await hash(`backups/${newFileName}`); 
+    
+    
+    expect(result.p1.iHash).to.equal(initialHashOfFile); 
+    
+    // CLEANUP 
+    await deleteFile(`backups/${result.p0.FnC}`);  
+    await deleteFile(`backups/${result.COMPLETE.fileName}`);
+    await deleteFile(`backups/${newFileName}`);
+    });
+    
+    
 }); 
 
 describe('Nimis | Return object data structure', () =>{
