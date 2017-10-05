@@ -2,13 +2,13 @@
 > Nimis is an asynchronous NodeJS backup utility with built-in secure hashing and encryption. 
 
 
-Nimis is built on a highly modulated code base to provide you with a high level of customisation to fit your needs. Coded in the latest and greatest asynchronous style, designed for maximum I/O performance. 
+Nimis is built on a highly modulated code base to provide you with a high level of customisation to fit your needs. Coded in asynchronous style, designed for maximum I/O performance. 
 
 Nimis provides you with built in features such as compression, encryption, dual layer integrity checking and more. 
 
 ## Notice
 
-Nimis is not yet stable for production environments, use at your own risk.
+Nimis is not yet stable for production environments, `USE AT YOUR OWN RISK`. Nimis was developed using an environment with the CentOS 7 operating system; using other operating systems may cause unexpected behaviour. 
 
 ## Requirements
 
@@ -104,11 +104,13 @@ This is the 40 character uniquely generated encryption key used to encrypt and d
 * Encryption 
     * Encryption is provided by the zip library, this is further increased by the Nimis module through the utilization of a long and uniquely generated 40 charecter key. `WARNING` the encryption used by your operating systems zip module may not be secure enough for your implimentation.
 * Asynchronous 
-    * Asynchronous code bundled with promises are used to ensure I/O performance is kept as high as possible.
+    * Asynchronous code integrated with promises and natively promisified functions are used to ensure I/O performance is kept as high as possible.
 
 ## Structure
 
 Nimis returns the main object once it has completed backup procedures. All files sent to Nimis are allocated properties in the order they were sent to Nimis. Properties start at `p0` and are infinite. 
+
+The `%temp%` directory on the host operating system is used for temporary data management while the `/backups/` directory holds the output data. 
 
 
 ## Errors
